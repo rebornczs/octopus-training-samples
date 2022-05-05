@@ -1,0 +1,4 @@
+classes=3
+train=data/train.txt  # 训练集和验证集用户需在训练脚本中生成到该位置
+valid=data/val.txt
+names=data/kitti.names

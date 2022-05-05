@@ -109,6 +109,7 @@ parser.add_argument("--weights", type=str, default="weights/best.pt")
 image_dir = os.path.join("/tmp/data/dataset", os.listdir("/tmp/data/dataset")[0])
 parser.add_argument("--source", type=str, default=image_dir)
 parser.add_argument("--output_dir", type=str)
+
 # 6-2、推理生成json结果文件
 import json
 results = []
@@ -134,6 +135,7 @@ self.label_files = [x.replace("JPEGImages", "labels").replace(os.path.splitext(x
 ```
 
 #### octopus整体流程
+```bash
 1、上传数据集  
 2、制作镜像并上传  
 3、上传训练算法  
@@ -141,3 +143,4 @@ self.label_files = [x.replace("JPEGImages", "labels").replace(os.path.splitext(x
 5、创建训练算法  
 6、创建评估算法  
 注：详细流程请参考Octopus训练服务指南
+```

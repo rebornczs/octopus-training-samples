@@ -3,6 +3,7 @@ import argparse
 from xml.dom.minidom import Document
 import cv2
 import os
+from ast import literal_eval
 
 import tqdm
 
@@ -18,7 +19,7 @@ def generate_xml(name, split_lines, img_size, class_ind):
     title.appendChild(title_text)
     annotation.appendChild(title)
 
-    img_name = name + '.png'
+    img_name = name + '.jpg'
 
     title = doc.createElement('filename')
     title_text = doc.createTextNode(img_name)
@@ -86,25 +87,27 @@ def generate_xml(name, split_lines, img_size, class_ind):
             title.appendChild(title_text)
             bndbox.appendChild(title)
 
-    # 将DOM对象doc写入文件
-    f = open('G:/A_Data/kitti_voc/Annotations/' + name + '.xml', 'w')
-    f.write(doc.toprettyxml(indent=''))
-    f.close()
+        f = open(os.path.join(os.path.dirname(opt.dir), "Annotations", name + ".xml"), "w")
+        f.write(doc.toprettyxml(indent=""))
+        f.close()
 
 
 if __name__ == '__main__':
-    class_ind = ('Pedestrian', 'Car', 'Cyclist')
-    # cur_dir = os.getcwd()
-    cur_dir = 'G:/A_Data/kitti_voc/'
-    labels_dir = os.path.join(cur_dir, 'label')
-    for parent, dirnames, filenames in os.walk(labels_dir):  # 分别得到根目录，子目录和根目录下文件
-        for file_name in tqdm.tqdm(filenames):
-            full_path = os.path.join(parent, file_name)  # 获取文件全路径
-            f = open(full_path)
-            split_lines = f.readlines()
-            name = file_name[:-4]  # 后四位是扩展名.txt，只取前面的文件名
-            img_name = name + '.png'
-            img_path = os.path.join('E:/A____paper/person/data/kitti/training/image_2/', img_name)  # 路径需要自行修改
-            img_size = cv2.imread(img_path).shape
-            generate_xml(name, split_lines, img_size, class_ind)
-print("Convert Finished!")
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--dir", type=str, help="please input label dir")
+    parser.add_argument("--classes", type=str, help="please input class str")
+    opt = parser.parse_args()
+    opt.classes = literal_eval(opt.classes)
+    os.makedirs(os.path.join(os.path.dirname(opt.dir), "Annotations"), exist_ok=True)
+
+    for parent, dirnames, filenames in os.walk(opt.dir):
+        for filename in filenames:
+            path = os.path.join(parent, filename)
+            with open(path, "r") as f:
+                lines = f.readlines()
+                name = filename[:-4]
+                img_name = name + ".jpg"
+                img_path = os.path.join(os.path.dirname(opt.dir), "JPEGImages", img_name)
+                img_size = cv2.imread(img_path).shape
+                generate_xml(name, lines, img_size, opt.classes)
+    print("Convert Finished!")

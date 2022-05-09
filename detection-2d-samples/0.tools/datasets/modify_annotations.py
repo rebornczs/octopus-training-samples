@@ -13,7 +13,7 @@ def show_labels(paths):
                     labels.add(label)
         except IOError as e:
             print(f"File Error: {e}")
-    print(labels)
+    return labels
 
 
 def modify_annotations(paths):

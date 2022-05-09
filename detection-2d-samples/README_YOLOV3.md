@@ -32,10 +32,10 @@ cp -r training/label_2 ./label_2
 find JPEGImages -name "*.png" | parallel "convert -quality 92 -sampling-factor 2x2,1x1,1x1 {.}.png {.}.jpg && rm {}"
 
 # 利用工具包里提供的修改标签脚本，修改标签，参数为需要修改的标签集文件夹路径（使用方法可直接查阅该脚本注释文档）
-python tools/datasets/modify_annotations.py --dir=/path/to/label_2
+python 0.tools/datasets/modify_annotations.py --dir=/path/to/label_2
 
 # 从kitti数据集转为voc数据集，即从txt格式转为xml格式，参数为需要修改的标签集文件夹路径
-python kitti2voc.py --dir=/path/to/label_2
+python kitti2voc.py --dir=/path/to/label_2 --classes="['Pedestrian', 'Car', 'Cyclist']"
 
 # 3、数据集从voc转coco格式（label_2文件夹中的标签集会转化到Annotations文件夹）
 # 3、由于转化为coco数据集后采用类别id写入标注文件，因此类别需严格和yolov3工程data/xx.names中类别严格对应（该项十分重要！）

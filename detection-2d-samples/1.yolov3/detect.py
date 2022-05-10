@@ -8,7 +8,8 @@ from utils.utils import *
 
 def detect(save_img=False):
     imgsz = (320, 192) if ONNX_EXPORT else opt.img_size  # (320, 192) or (416, 256) or (608, 352) for (height, width)
-    out, source, weights, half, view_img, save_txt = opt.output, opt.source, opt.weights, opt.half, opt.view_img, opt.save_txt
+    # 6-3、修改推理源文件夹
+    out, source, weights, half, view_img, save_txt = opt.output, opt.image_dir, opt.weights, opt.half, opt.view_img, opt.save_txt
     webcam = source == '0' or source.startswith('rtsp') or source.startswith('http') or source.endswith('.txt')
 
     # Initialize
@@ -188,7 +189,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     # 6-1、修改detect.py推理脚本配置项
     parser.add_argument("--cfg", type=str, default="cfg/yolov3-spp.cfg")
-    parser.add_argument("--names", type=str, default="cfg/kitti.names")
+    parser.add_argument("--names", type=str, default="data/kitti.names")
     parser.add_argument("--weights", type=str, default="weights/best.pt")
     image_dir = os.path.join("/tmp/data/dataset", os.listdir("/tmp/data/dataset")[0])
     parser.add_argument("--image_dir", type=str, default=image_dir)

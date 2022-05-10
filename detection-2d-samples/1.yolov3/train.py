@@ -396,7 +396,7 @@ if __name__ == '__main__':
     # 3、修改参数配置项
     parser.add_argument("--batch-size", type=int, default=4)
     parser.add_argument("--cfg", type=str, default="cfg/yolov3-spp.cfg")
-    parser.add_argument("--data", type=str, default="cfg/kitti.data")
+    parser.add_argument("--data", type=str, default="data/kitti.data")
     parser.add_argument("--img-size", nargs="+", type=int, default=[640])
     parser.add_argument("--weights", type=str, default="weights/yolov3-spp.weights")
     parser.add_argument('--multi-scale', action='store_true', help='adjust (67%% - 150%%) img_size every 10 batches')
@@ -434,7 +434,8 @@ if __name__ == '__main__':
 
     # 4-2、创建训练集和验证集
     image_dirs = [os.path.join(DATASET_DIR, image_dir) for image_dir in os.listdir(DATASET_DIR)]
-    image_dirs = [os.path.join(image_dir, os.listdir(image_dir)[0]) for image_dir in image_dirs]
+    image_dirs = [os.path.join(image_dir, os.listdir(image_dir)[0], "JPEGImages") for image_dir in image_dirs]
+    print(image_dirs)
     f_train = open("data/train.txt", "w")
     f_val = open("data/val.txt", "w")
     # 此处仅为示例，具体切分方式以用户方法为准，例如7:3分割

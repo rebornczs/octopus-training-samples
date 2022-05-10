@@ -35,11 +35,11 @@ find JPEGImages -name "*.png" | parallel "convert -quality 92 -sampling-factor 2
 python 0.tools/datasets/modify_annotations.py --dir=/path/to/label_2
 
 # 从kitti数据集转为voc数据集，即从txt格式转为xml格式，参数为需要修改的标签集文件夹路径
-python kitti2voc.py --dir=/path/to/label_2 --classes="['Pedestrian', 'Car', 'Cyclist']"
+python 0.tools/datasets/kitti2voc.py --dir=/path/to/label_2 --classes="['Pedestrian', 'Car', 'Cyclist']"
 
 # 3、数据集从voc转coco格式（label_2文件夹中的标签集会转化到Annotations文件夹）
 # 3、由于转化为coco数据集后采用类别id写入标注文件，因此类别需严格和yolov3工程data/xx.names中类别严格对应（该项十分重要！）
-python voc2coco.py --dir=/path/to/Annotations --classes="['Pedestrian', 'Car', 'Cyclist']"
+python 0.tools/datasets/voc2coco.py --dir=/path/to/Annotations --classes="['Pedestrian', 'Car', 'Cyclist']"
 ```
 #### 准备开源预训练权重，推荐直接从以下微云链接下载(yolov3-spp.weights)
 ```bash
@@ -60,14 +60,14 @@ Cyclist
 
 # 2-2、新建./data/kitti.data
 classes=3
-train=data/train.txt  # 训练集和验证集用户需在训练脚本中生成到该位置
+train=data/train.txt
 valid=data/val.txt
 names=data/kitti.names
 
 # 3、修改参数配置项
 parser.add_argument("--batch-size", type=int, default=4)
 parser.add_argument("--cfg", type=str, default="cfg/yolov3-spp.cfg")
-parser.add_argument("--data", type=str, default="cfg/kitti.data")
+parser.add_argument("--data", type=str, default="data/kitti.data")
 parser.add_argument("--img-size", nargs="+", type=int, default=[640])
 parser.add_argument("--weights", type=str, default="weights/yolov3-spp.weights")
 
@@ -79,7 +79,8 @@ RES_DIR = "/tmp/res"
 
 # 4-2、创建训练集和验证集
 image_dirs = [os.path.join(DATASET_DIR, image_dir) for image_dir in os.listdir(DATASET_DIR)]
-image_dirs = [os.path.join(image_dir, os.listdir(image_dir)[0]) for image_dir in image_dirs]
+image_dirs = [os.path.join(image_dir, os.listdir(image_dir)[0], "JPEGImages") for image_dir in image_dirs]
+print(image_dirs)
 f_train = open("data/train.txt", "w")
 f_val = open("data/val.txt", "w")
 # 此处仅为示例，具体切分方式以用户方法为准，例如7:3分割
@@ -89,6 +90,8 @@ for image_dir in image_dirs:
         f_val.write(os.path.join(image_dir, image_name) + "\n")
 f_train.close()
 f_val.close()
+# 4-3、适配utils/dataset.py，仅需修改图片集文件夹名称从images->JPEGImages即可
+self.label_files = [x.replace("JPEGImages", "labels").replace(os.path.splitext(x)[-1], ".txt") for x in self.img_files]
 
 # 5、训练产物上传
 import shutil
@@ -104,7 +107,7 @@ shutil.copy("detect.py", os.path.join(RES_DIR, "detect.py"))
 # 6、以下部分适配推理（标注或评估）
 # 6-1、修改detect.py推理脚本配置项
 parser.add_argument("--cfg", type=str, default="cfg/yolov3-spp.cfg")
-parser.add_argument("--names", type=str, default="cfg/kitti.names")
+parser.add_argument("--names", type=str, default="data/kitti.names")
 parser.add_argument("--weights", type=str, default="weights/best.pt")
 image_dir = os.path.join("/tmp/data/dataset", os.listdir("/tmp/data/dataset")[0])
 parser.add_argument("--source", type=str, default=image_dir)
@@ -114,9 +117,7 @@ parser.add_argument("--output_dir", type=str)
 import json
 results = []
 for i, det in enumerate(pred):
-    # xxx
     if det is not None and len(det):
-        # xxx
         for *xyxy, conf, cls in reversed(det):
             bbox = {"xmin": int(xyxy[0]), "ymin": int(xyxy[1]), "xmax": int(xyxy[2]), "ymax": int(xyxy[3])}
             results.append({
@@ -127,11 +128,10 @@ for i, det in enumerate(pred):
                 "occluded": None,
                 "truncated": None
             })
-            # xxx
     json_file = os.path.join(opt.output_dir, os.path.basename(path).split(".")[0] + ".json")
     json.dump(results, open(json_file, "w"))
-# 6-3、适配utils/dataset.py，仅需修改图片集文件夹名称从images->JPEGImages即可
-self.label_files = [x.replace("JPEGImages", "labels").replace(os.path.splitext(x)[-1], ".txt") for x in self.img_files]
+
+# 6-3、修改推理源文件夹
 ```
 
 #### octopus整体流程

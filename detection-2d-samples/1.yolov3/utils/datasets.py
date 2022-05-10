@@ -292,8 +292,6 @@ class LoadImagesAndLabels(Dataset):  # for training/testing
         # 6-3、适配utils/dataset.py，仅需修改图片集文件夹名称从images->JPEGImages即可
         self.label_files = [x.replace("JPEGImages", "labels").replace(os.path.splitext(x)[-1], ".txt") for x in
                             self.img_files]
-        self.label_files = [x.replace('images', 'labels').replace(os.path.splitext(x)[-1], '.txt')
-                            for x in self.img_files]
 
         # Read image shapes (wh)
         sp = path.replace('.txt', '') + '.shapes'  # shapefile path

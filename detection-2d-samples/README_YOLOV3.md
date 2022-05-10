@@ -17,7 +17,7 @@ rm -rf .github .dockerignore .gitattributes .gitignore Dockerfile LICENSE tutori
 #### 准备数据集（以自动驾驶最常用数据集kitti为例）
 ```bash
 ## 方式一：直接从微云下载已为yolov3 darknet版本适配好的数据集
-https://share.weiyun.com/rjdx2exO
+https://share.weiyun.com/oVnmH9f5
 
 ## 方式二：数据集转换 kitti -> voc -> coco
 # 1、下载原始kitti数据集相机图片数据（仅下载左相机数据包和标签集即可）
@@ -43,7 +43,7 @@ python 0.tools/datasets/voc2coco.py --dir=/path/to/Annotations --classes="['Pede
 ```
 #### 准备开源预训练权重，推荐直接从以下微云链接下载(yolov3-spp.weights)
 ```bash
-https://share.weiyun.com/rjdx2exO
+https://share.weiyun.com/EgyRBNeu
 ```
 #### 算法修改适配octopus（代码修改项可搜索 对应"#"注释体 查看）
 ```python

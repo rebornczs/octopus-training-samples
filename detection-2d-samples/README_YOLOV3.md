@@ -130,8 +130,6 @@ for i, det in enumerate(pred):
             })
     json_file = os.path.join(opt.output_dir, os.path.basename(path).split(".")[0] + ".json")
     json.dump(results, open(json_file, "w"))
-
-# 6-3、修改推理源文件夹
 ```
 
 #### octopus整体流程
@@ -140,7 +138,8 @@ for i, det in enumerate(pred):
 2、制作镜像并上传  
 3、上传训练算法  
 4、创建模型库  
-5、创建训练算法  
-6、创建评估算法  
+5、创建训练任务
+6、创建评估任务
+7、创建编译任务
 注：详细流程请参考Octopus训练服务指南
 ```

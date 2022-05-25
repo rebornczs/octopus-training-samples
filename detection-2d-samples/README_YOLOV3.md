@@ -1,10 +1,28 @@
 ### 快速入门
+
+#### 算法
 ```bash
 # 直接从本工程拷贝，相关需要修改适配的代码已完成，或参考从头开始构建查看需要修改的代码项
 git clone https://github.com/rebornczs/octopus-training-samples.git
 # 进入yolov3工程目录下（已适配octopus)
 cd octopus-training-samples/detection-2d-samples/1.yolov3
 ```
+
+#### 镜像
+```bash
+# 制作镜像（AI引擎）
+cd docker
+docker build -f DOCKERFILE -t yolov3:1.0
+# 前往平台创建新的AI引擎，点击"创建引擎"，并选择"训练/评估"引擎，生成记录后点击推送，生成推送的login命令和push命令
+# 重命名上述创建的镜像
+docker tag yolov3:1.0 121.xxx.xxx.xxx/xxxxxx
+# 用上述命令在ubuntu(mac)机器上登录
+docker login xxxxxx
+# 推送已重命名的镜像（注：不要添加version字段，会自动赋用latest
+docker push 121.xxx.xxx.xxx/xxxxxx
+```
+#### 数据集请参照下节获取
+
 ### 从头开始构建
 #### 获取算法工程
 ```bash
@@ -135,11 +153,20 @@ for i, det in enumerate(pred):
 #### octopus整体流程
 ```bash
 1、上传数据集  
+  下载数据集后点击"数据服务"-"数据集"-"创建数据集"-"本地直传"；填写名称、标注物（数据集的标签）、标注格式（自定义数据集建议创建自定义格式，比如填写TEST，点击创建），上传数据集目录
 2、制作镜像并上传  
+  镜像制作和上传至Octopus平台请参照上文中教程
 3、上传训练算法  
 4、创建模型库  
+  在创建训练任务前，先创建模型仓库，用于存放算法生成的模型
 5、创建训练任务
 6、创建评估任务
+  参照"快速指南"使用
+  点击"创建评估任务"，选择刚刚训练完成的模型，数据集选择用户上传的数据集，评估脚本选择"目标检测2D"，参数填写如下：
+  inference_file: detect.py (模型中提供detect脚本，评估前会根据此脚本生成推理结果文件)
+  classes_str: car,pedestrian,cyclist (填写需要评估的类别，本yolov3任务主要训练此三类别)
+  点击"运行"，查看评估结果
 7、创建编译任务
+  该任务需用户方提供芯片的交叉编译环境镜像
 注：详细流程请参考Octopus训练服务指南
 ```

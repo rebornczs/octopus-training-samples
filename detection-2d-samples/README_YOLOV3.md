@@ -51,7 +51,7 @@ epochs: 10 # 可添加train.py接收的命令后参数，此处将训练的次�
 #### 4、上传数据集至Octopus平台（以自动驾驶最常用数据集kitti为例）
 ```bash
 1、直接从微云下载已为yolov3 darknet版本适配好的数据集
-https://share.weiyun.com/oVnmH9f5
+https://share.weiyun.com/WN41WPOt
 
 2、点击"数据服务/数据集"标签页，点击"新建数据集"，选择"本地直传"
 数据集名称：自动驾驶KITTI目标检测2D数据集

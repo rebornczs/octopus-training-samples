@@ -12,7 +12,13 @@ import argparse
 import glob
 import os
 import os.path as ops
+import sys
 import time
+import json
+
+base_path = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
+sys.path.insert(0, base_path)
+os.chdir(base_path)
 
 import cv2
 import numpy as np
@@ -34,9 +40,12 @@ def init_args():
     :return:
     """
     parser = argparse.ArgumentParser()
-    parser.add_argument('--image_dir', type=str, help='The source tusimple lane test data dir')
-    parser.add_argument('--weights_path', type=str, help='The model weights path')
-    parser.add_argument('--save_dir', type=str, help='The test output save root dir')
+    parser.add_argument('--image_dir', type=str, default=ops.join(base_path, "test_set"),
+                        help='The source tusimple lane test data dir')
+    parser.add_argument('--weights_path', type=str,
+                        default=ops.join(base_path, "checkpoints/tusimple_lanenet.ckpt"), help='The model weights path')
+    parser.add_argument('--save_dir', type=str, default=ops.join(base_path, "res"),
+                        help='The test output save root dir')
 
     return parser.parse_args()
 
@@ -69,6 +78,9 @@ def eval_lanenet(src_dir, weights_path, save_dir):
     sess_config.gpu_options.allocator_type = 'BFC'
 
     sess = tf.Session(config=sess_config)
+
+    # todo
+    inference_result = []
 
     with sess.as_default():
 
@@ -109,6 +121,13 @@ def eval_lanenet(src_dir, weights_path, save_dir):
                 continue
 
             cv2.imwrite(output_image_path, postprocess_result['source_image'])
+
+            # todo
+            raw_file = "clips" + image_path.split("clips")[1]
+            inference_result.append({
+                raw_file: postprocess_result["lanes"]
+            })
+        json.dump(inference_result, open("/tmp/res/inference.json", "w"))
 
     return
 

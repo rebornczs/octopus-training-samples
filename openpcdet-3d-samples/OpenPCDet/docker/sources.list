@@ -1,0 +1,10 @@
+deb http://cmc-cd-mirror.rnd.huawei.com/ubuntu/ bionic main multiverse restricted universe
+deb http://cmc-cd-mirror.rnd.huawei.com/ubuntu/ bionic-backports main multiverse restricted universe
+deb http://cmc-cd-mirror.rnd.huawei.com/ubuntu/ bionic-proposed main multiverse restricted universe
+deb http://cmc-cd-mirror.rnd.huawei.com/ubuntu/ bionic-security main multiverse restricted universe
+deb http://cmc-cd-mirror.rnd.huawei.com/ubuntu/ bionic-updates main multiverse restricted universe
+deb-src http://cmc-cd-mirror.rnd.huawei.com/ubuntu/ bionic main multiverse restricted universe
+deb-src http://cmc-cd-mirror.rnd.huawei.com/ubuntu/ bionic-backports main multiverse restricted universe
+deb-src http://cmc-cd-mirror.rnd.huawei.com/ubuntu/ bionic-proposed main multiverse restricted universe
+deb-src http://cmc-cd-mirror.rnd.huawei.com/ubuntu/ bionic-security main multiverse restricted universe
+deb-src http://cmc-cd-mirror.rnd.huawei.com/ubuntu/ bionic-updates main multiverse restricted universe

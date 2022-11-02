@@ -1,0 +1,8 @@
+path: /cache/data0/coco128
+train: JPEGImages
+val: JPEGImages
+test: JPEGImages
+
+
+nc: 3
+names: ["Car", "Pedestrian", "Cyclist"]

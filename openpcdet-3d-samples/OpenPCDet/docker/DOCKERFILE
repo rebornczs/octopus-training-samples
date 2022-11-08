@@ -1,29 +1,48 @@
 FROM nvidia/cuda:11.0.3-devel-ubuntu18.04
 
-WORKDIR /root/workspace
-
-COPY ./pip.conf /root/.pip/pip.conf
-COPY ./sources.list /etc/apt/sources.list
-COPY ./requirements.txt /root/requirements.txt
+RUN rm -rf /home/work && mkdir /home/cache
+WORKDIR /home
+# WORKDIR /root/workspace
+# xiangjiang
+COPY docker/docker_xiangjiang/files/work ./work
+COPY docker/docker_xiangjiang/files/common ./common
+COPY docker/docker_xiangjiang/files/third_party_sdk ./third_party_sdk
+COPY docker/docker_xiangjiang/files/conf ./conf
+COPY docker/docker_xiangjiang/files/dls-key-client /usr/bin/dls-key-client
+COPY openpcdet-3d-samples/OpenPCDet/docker/pip.conf /root/.pip/pip.conf
+######
+# COPY ./sources.list /etc/apt/sources.list
+COPY openpcdet-3d-samples/OpenPCDet/docker/requirements.txt /root/requirements.txt
 
 RUN rm -rf /etc/apt/sources.list.d/* && \
     apt -y update && \
     apt-get install build-essential && \
     apt-get install -y apt-utils git curl ca-certificates bzip2 tree htop wget && \
-    apt -y install python3.8 python3-pip python3.8-dev && \
-    echo alias python=python3 >> ~/.bashrc && echo alias pip=pip3 >> ~/.bashrc \
+    apt -y install python3 python3-pip && \
     apt install -y libglib2.0-0 libsm6 libxext6 libxrender-dev libgl1-mesa-glx bmon iotop g++ && \
     rm -f /usr/bin/python && \
-    ln -s /usr/bin/python3.8 /usr/bin/python && \
-    rm -f /usr/bin/python3 && \
-    ln -s /usr/bin/python3.8 /usr/bin/python3
+    ln -s /usr/bin/python3 /usr/bin/python && \
+    ln -s /usr/bin/pip3 /usr/bin/pip
 
-RUN python -m pip install --upgrade pip && \
-    pip3 install --upgrade setuptools
+#xiangjiang
+RUN echo "/home/third_party_sdk/obs_sdk/src" > /usr/local/lib/python3.6/dist-packages/obs-python-sdk.pth
+#####
+RUN python -m pip install --upgrade pip && pip3 install --upgrade setuptools
+RUN pip3 install -r /root/requirements.txt
 
-RUN pip install -r /root/requirements.txt
+#xiangjiang
+RUN pip --no-cache-dir install Cython pytest-runner==5.1 boto3 botocore netifaces zmq hyper
+RUN pip --no-cache-dir install elasticsearch psycopg2 flask requests concurrent-log-handler
+RUN chmod a+x /home/work/run_train_kubernetes.sh
+######
 
-RUN pip3 install SharedArray && \
-    pip3 install spconv-cu114
+# RUN pip3 install SharedArray && pip3 install spconv-cu114
 
-ENV PYTHONBUFFERED 1
+# ENV PYTHONBUFFERED 1
+#xiangjiang
+ENV PATH /opt/octopus/tools/miniconda3/bin/:/home/work/:/home/:$PATH
+ENV LD_LIBRARY_PATH /opt/octopus/tools/lib:$LD_LIBRARY_PATH
+ENV PYTHONPATH /home/work:$PYTHONPATH
+ENV PYTHONPATH /home/work/octopus:$PYTHONPATH
+ENV PYTHONPATH /home/:$PYTHONPATH
+#####

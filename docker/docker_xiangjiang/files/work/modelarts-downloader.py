@@ -196,7 +196,7 @@ def get_s3_client():
         s3_region = os.environ.get('S3_REGION', DEFAULT_REGION)
         use_https = os.environ.get('S3_USE_HTTPS', '1')
         verify_ssl = os.environ.get('S3_VERIFY_SSL', '1')
-        if use_https == '1':
+        if use_https == '0':
             use_ssl = True
             if not endpoint.lower().startswith(HTTPS_PREFIX):
                 endpoint = HTTPS_PREFIX + endpoint

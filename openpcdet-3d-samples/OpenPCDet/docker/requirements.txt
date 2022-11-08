@@ -1,11 +1,12 @@
+cmake
 numpy
 llvmlite
 numba
-torch>=1.1
+torch==1.5.0
+torchvision==0.6.0
 tensorboardX
 easydict
 pyyaml
 scikit-image
 tqdm
-torchvision
-SharedArray
+six

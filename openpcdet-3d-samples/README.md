@@ -105,8 +105,11 @@ AI引擎：openpcdet
 # 进入 Openpcdet/tools/cfgs/dataset_configs/kitti_dataset.yaml 
 # 更改 line 2 为你的数据路径
 DATA_PATH = /path/to/your/dataset
+# 如果不使用road plane数据，更改模型文件参数，使用则为True
+# 以point_pillar为例，更改Openpcdet/tools/cfgs/kitti_models/pointpillar.yaml line 27
+USE_ROAD_PLANE: False
 # 进入 Openpcdet/pcdet/datasets/kitti/kitti_dataset.py 
-# 更改 line 489 为你的数据路径
+# 更改 line 488 为你的数据路径
 data_path = Path("/path/to/your/dataset")
 
 # 若想使用别的配置文件代替point_pillar.yaml
@@ -128,9 +131,10 @@ output_dir = Path("/path/to/your/directory") / 'output' / cfg.EXP_GROUP_PATH / c
 data
 ├── kitti
 │   │── ImageSets
+│   │   │──train.txt & test.txt & val.txt(自己编写，或者复制粘贴)
 │   │── training
-│   │   ├──calib & velodyne & label_2 & image_2 & (optional: planes) & (optional: depth_2)
+│   │   │──calib & velodyne & label_2 & image_2 & (optional: planes) & (optional: depth_2)
 │   │── testing
-│   │   ├──calib & velodyne & image_2
+│   │   │──calib & velodyne & image_2
 ```
 

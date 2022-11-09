@@ -3,17 +3,18 @@ FROM nvidia/cuda:11.0.3-devel-ubuntu18.04
 
 # Install linux packages
 RUN rm -rf /home/work
-RUN mkdir /home/cache && mkdir -p /root/.config/Ultralytics
+RUN mkdir /home/cache
+RUN mkdir -p /root/.config/Ultralytics
 WORKDIR /home
-COPY ../../docker/docker_xiangjiang/files/work ./work
-COPY ../../docker/docker_xiangjiang/files/common ./common
-COPY ../../docker/docker_xiangjiang/files/third_party_sdk ./third_party_sdk
-COPY ../../docker/docker_xiangjiang/files/conf ./conf
-COPY ../../docker/docker_xiangjiang/files/dls-key-client /usr/bin/dls-key-client
-COPY ../../docker/docker_xiangjiang/files/Arial.ttf /root/.config/Ultralytics/Arial.ttf
-COPY ../../docker/docker_xiangjiang/pip.conf /root/.pip/pip.conf
+COPY docker/docker_xiangjiang/files/work ./work
+COPY docker/docker_xiangjiang/files/common ./common
+COPY docker/docker_xiangjiang/files/third_party_sdk ./third_party_sdk
+COPY docker/docker_xiangjiang/files/conf ./conf
+COPY docker/docker_xiangjiang/files/dls-key-client /usr/bin/dls-key-client
+COPY docker/docker_xiangjiang/files/Arial.ttf /root/.config/Ultralytics/Arial.ttf
+COPY docker/docker_xiangjiang/pip.conf /root/.pip/pip.conf
 # COPY ./sources.list /etc/apt/sources.list
-COPY ./requirements.txt /root/requirements.txt
+COPY detection-2d-samples/2.yolov5/requirements.txt /root/requirements.txt
 
 RUN rm -rf /etc/apt/sources.list.d/* && \
         apt -y update && \
@@ -35,6 +36,7 @@ RUN pip --no-cache-dir install elasticsearch psycopg2 flask requests concurrent-
 RUN chmod a+x /home/work/run_train_kubernetes.sh
 
 # Python ENV
+# ENV PYTHONBUFFERED 1
 ENV PATH /opt/octopus/tools/miniconda3/bin/:/home/work/:/home/:$PATH
 ENV LD_LIBRARY_PATH /opt/octopus/tools/lib:$LD_LIBRARY_PATH
 ENV PYTHONPATH /home/work:$PYTHONPATH

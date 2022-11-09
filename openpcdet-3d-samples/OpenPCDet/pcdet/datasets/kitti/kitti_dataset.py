@@ -41,7 +41,7 @@ class KittiDataset(DatasetTemplate):
             self.logger.info('Loading KITTI dataset')
         kitti_infos = []
 
-        my_root_path = os.path.abspath(os.path.join(os.getcwd(), '..'))
+        my_root_path = (Path(__file__).resolve().parent / '../../../').resolve()
         for info_path in self.dataset_cfg.INFO_PATH[mode]:
             info_path = Path(my_root_path)/ "data/kitti" / info_path
             if not info_path.exists():
@@ -230,9 +230,8 @@ class KittiDataset(DatasetTemplate):
         import torch
         import os
 
-        my_root_path = os.getcwd()
-        database_save_path = Path(my_root_path) / "data/kitti" / ('gt_database' if split == 'train' else ('gt_database_%s' % split))
-        db_info_save_path = Path(my_root_path) / "data/kitti" / ('kitti_dbinfos_%s.pkl' % split)
+        database_save_path = Path(self.root_path) / ('gt_database' if split == 'train' else ('gt_database_%s' % split))
+        db_info_save_path = Path(self.root_path) / ('gt_databasekitti_dbinfos_%s.pkl' % split)
 
         database_save_path.mkdir(parents=True, exist_ok=True)
         all_db_infos = {}
@@ -486,6 +485,6 @@ if __name__ == '__main__':
         create_kitti_infos(
             dataset_cfg=dataset_cfg,
             class_names=['Car', 'Pedestrian', 'Cyclist'],
-            data_path=ROOT_DIR / 'data' / 'kitti',
+            data_path=Path("/cache/data0/new_kitti"),
             save_path=ROOT_DIR / 'data' / 'kitti'
         )

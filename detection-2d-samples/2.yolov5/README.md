@@ -1,3 +1,5 @@
+## 请参照1.yolv3上一层级README进行构建！
+
 <div align="center">
 <p>
    <a align="left" href="https://ultralytics.com/yolov5" target="_blank">

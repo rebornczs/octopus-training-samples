@@ -6,7 +6,7 @@
 git clone https://github.com/rebornczs/octopus-training-samples.git
 cd octopus-training-samples/detection-2d-samples/1.yolov3
 # 下载预训练权重文件
-https://share.weiyun.com/EgyRBNeu
+https://share.weiyun.com/UGnfIwXF
 cp /path/to/yours/yolov3_spp.weights weights/
 
 # 删除无关文件，若不删除.开头文件，无法上传至Octopus训练服务平台
@@ -155,11 +155,11 @@ parser.add_argument("--weights", type=str, default="weights/yolov3-spp.weights")
 # 4-1、添加约定项路径（数据集路径、生成产物上传路径）
 os.chdir(os.path.dirname(os.path.realpath(__file__)))
 DATASET_DIR = "/tmp/data/dataset"
-RES_DIR = "/tmp/res"
+RES_DIR = "/tmp/result"
 
 # 4-2、创建训练集和验证集
 image_dirs = [os.path.join(DATASET_DIR, image_dir) for image_dir in os.listdir(DATASET_DIR)]
-image_dirs = [os.path.join(image_dir, os.listdir(image_dir)[0], "JPEGImages") for image_dir in image_dirs]
+image_dirs = [os.path.join(image_dir, "JPEGImages") for image_dir in image_dirs]
 print(image_dirs)
 f_train = open("data/train.txt", "w")
 f_val = open("data/val.txt", "w")

@@ -430,11 +430,11 @@ if __name__ == '__main__':
     # 4-1、添加约定项路径（数据集路径、生成产物上传路径）
     os.chdir(os.path.dirname(os.path.realpath(__file__)))
     DATASET_DIR = "/tmp/data/dataset"
-    RES_DIR = "/tmp/res"
+    RES_DIR = "/tmp/result"
 
     # 4-2、创建训练集和验证集
     image_dirs = [os.path.join(DATASET_DIR, image_dir) for image_dir in os.listdir(DATASET_DIR)]
-    image_dirs = [os.path.join(image_dir, os.listdir(image_dir)[0], "JPEGImages") for image_dir in image_dirs]
+    image_dirs = [os.path.join(image_dir, "JPEGImages") for image_dir in image_dirs]
     print(image_dirs)
     f_train = open("data/train.txt", "w")
     f_val = open("data/val.txt", "w")
